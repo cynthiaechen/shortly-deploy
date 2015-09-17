@@ -47,12 +47,12 @@ usersSchema.methods.comparePassword = function(attemptedPassword, callback) {
   });
 };
 
-usersSchema.methods.hashPassword = function() {
+usersSchema.methods.hashPassword = function(callback) {
   var cipher = Promise.promisify(bcrypt.hash);
   return cipher(this.password, null, null).bind(this)
     .then(function(hash) {
       this.password = hash;
-      console.log(this.password);
+      callback(this);
     });
 };
 
