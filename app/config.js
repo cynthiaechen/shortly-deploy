@@ -17,6 +17,8 @@ var Promise = require('bluebird');
 //   }
 // });
 
+mongoose.connect('mongodb://localhost/shortlyDB');
+
 var db = mongoose.connection;
 
 var urlsSchema = new mongoose.Schema({
@@ -28,10 +30,10 @@ var urlsSchema = new mongoose.Schema({
 , code: String
 , timestamps : { type : Date, default: Date.now }});
 
-urlsSchema.methods.setCode: function(){  
+urlsSchema.methods.setCode = function(){  
   var shasum = crypto.createHash('sha1');
   shasum.update(this.url);
-  this.code = shasum.digest('hex').slice(0, 5));
+  this.code = shasum.digest('hex').slice(0, 5);
 };
 
 var usersSchema = new mongoose.Schema({
@@ -39,17 +41,18 @@ username: String
 , password: String
 , timestamps : { type : Date, default: Date.now }});
 
-usersSchema.methods.comparePassword: function(attemptedPassword, callback) {
+usersSchema.methods.comparePassword = function(attemptedPassword, callback) {
   bcrypt.compare(attemptedPassword, this.password, function(err, isMatch) {
     callback(isMatch);
   });
 };
 
-usersSchema.methods.hashPassword: function() {
+usersSchema.methods.hashPassword = function() {
   var cipher = Promise.promisify(bcrypt.hash);
   return cipher(this.password, null, null).bind(this)
     .then(function(hash) {
       this.password = hash;
+      console.log(this.password);
     });
 };
 
@@ -60,11 +63,10 @@ var User = mongoose.model('User', usersSchema);
  
 db.on('error', console.error);
 
-// db.once('open', function() {
+db.once('open', function() {
+  console.log('Database is started!');
+});
 
-// });
-
-mongoose.connect('mongodb://localhost/test');
 
 // db.knex.schema.hasTable('urls').then(function(exists) {
 //   if (!exists) {
@@ -95,8 +97,10 @@ mongoose.connect('mongodb://localhost/test');
 //   }
 // });
 
-module.exports = db;
+module.exports.db = db;
 
-module.exports = Link;
-module.exports = User;
+module.exports.Link = Link;
+module.exports.User = User;
+module.exports.urlSchema = urlsSchema;
+module.exports.usersSchema = usersSchema;
 
