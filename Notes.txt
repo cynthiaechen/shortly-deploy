@@ -1,3 +1,6 @@
 /app/config.js - Bookshelf server variables
 
 /server.js - Server port
+
+
+mongodb://mongogoose:p4LCUmdBTnYVUHmzrN3V9UV6dfDa1zyLvZMjtUagiEc-@ds042888.mongolab.com:42888/mongogoose

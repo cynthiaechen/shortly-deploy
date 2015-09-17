@@ -17,7 +17,7 @@ var Promise = require('bluebird');
 //   }
 // });
 
-mongoose.connect('mongodb://localhost/shortlyDB');
+mongoose.connect('mongodb://mongogoose:p4LCUmdBTnYVUHmzrN3V9UV6dfDa1zyLvZMjtUagiEc-@ds042888.mongolab.com:42888/mongogoose');
 
 var db = mongoose.connection;
 
